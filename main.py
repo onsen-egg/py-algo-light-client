@@ -1,7 +1,7 @@
 from utils import AssetLoader, verify_transaction, load
-from base64 import b64decode
 
 asset_folder = 'testassets1'
+
 assets = AssetLoader(asset_folder)
 
 verify_transaction(

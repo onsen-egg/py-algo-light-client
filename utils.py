@@ -3,7 +3,7 @@ from base64 import b64decode
 from hashlib import sha256
 import os
 import ast
-from lightBlockHeader import serialize_block_header
+from lightBlockHeader import serialize_light_block_header
 
 txn_merkle_leaf = "TL".encode()
 merkle_array_node = "MA".encode()
@@ -72,7 +72,7 @@ def compute_lightblockheader_leaf(
   genesis_hash, # 32 bytes
   seed # 32
 ):
-  lbh_serialized = serialize_block_header(
+  lbh_serialized = serialize_light_block_header(
     seed,
     genesis_hash,
     round_number,
@@ -112,9 +112,7 @@ def compute_vector_commitment_root(
     return leaf
 
   node_hash_size = sha256().digest_size
-  print(tree_depth)
-  print(node_hash_size)
-  print(len(proof))
+
   if tree_depth * node_hash_size != len(proof):
     raise Exception("ErrProofLengthTreeDepthMismatch")
   
@@ -156,7 +154,6 @@ def verify_transaction(
     raise Exception("Only sha256 is supported for hashtype")
 
   stib_hash = b64decode(transaction_proof["stibhash"])
-  print("stib_hash: 0x{}".format(stib_hash.hex()))
 
   transaction_leaf = compute_transaction_leaf(
     transaction_hash, 
@@ -187,3 +184,5 @@ def verify_transaction(
   )
   print("lightblockheader_proof_root: 0x{}".format(lightblockheader_proof_root.hex()))
   print("block_interval_commitment: 0x{}".format(block_interval_commitment.hex()))
+
+  return lightblockheader_proof_root == block_interval_commitment

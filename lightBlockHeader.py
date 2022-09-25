@@ -26,7 +26,7 @@ def next_power_of_2(n):
     i += 1
   return i
 
-def serialize_block_header(
+def serialize_light_block_header(
   seed: bytes,
   genesis_hash: bytes,
   round_number: int,
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
   tx_commitment = bytes([82, 95, 217, 45, 118, 45, 86, 230, 150, 70, 86, 29, 117, 241, 52, 225, 126, 144, 251, 104, 39, 213, 168, 163, 244, 124, 36, 131, 165, 155, 8, 166])
 
-  lbh = serialize_block_header(
+  lbh = serialize_light_block_header(
     seed,
     genesis_hash,
     round_number,

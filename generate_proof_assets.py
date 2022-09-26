@@ -1,3 +1,4 @@
+from hashlib import sha256
 import algosdk
 import os
 import sys

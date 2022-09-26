@@ -2,24 +2,24 @@ import algosdk
 import os
 from base64 import b32decode, b64decode
 
-folder_name = 'test_assets_2'
+folder_name = 'test_assets_3'
 
-round_num = 24358000
-tx_id = 'W227BKS3KRAZWLSWFIMTTFDMR4TDKXQAMEXEELS7MOHYFHZLNHVQ'
+round_num = 24377196
+tx_id = 'BJLYHXER7HHG3RMIX3VQNQM2YIRRIVPOEAILOXU2TK6J4R7RI44Q'
 
 token = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 net = 'http://localhost:4001'
 # token = "842126029"
 # net = "https://testnet-api.algonode.cloud:4001"
 
+client = algosdk.v2client.algod.AlgodClient(token, net)
+
 if os.path.exists(folder_name):
   raise Exception('The folder name {} is already in use'.format(folder_name))
 
 os.mkdir(folder_name)
 
-client = algosdk.v2client.algod.AlgodClient(token, net)
-
-genesis = client.genesis()
+# genesis = client.genesis()
 state_proof = client.stateproofs(round_num)
 lightblockheader_proof = client.lightblockheader_proof(round_num)
 transaction_proof = client.transaction_proof(round_num, tx_id, hashtype='sha256')

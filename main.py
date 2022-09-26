@@ -1,19 +1,22 @@
-from utils import AssetLoader, verify_transaction, load
+import sys
+from utils import AssetLoader, verify_transaction
 
-asset_folder = 'test_assets_1'
-#asset_folder = 'test_assets_2'
-asset_folder = 'test_assets_4'
+# In CLI run: python3 main.py <ASSET_FOLDER_NAME>
 
-assets = AssetLoader(asset_folder)
+if __name__ == '__main__':
+  if len(sys.argv) == 1:
+    raise Exception('Provide a folder containing the proof assets as an argument')
 
-result = verify_transaction(
-  assets.tx_hash,
-  assets.tx_proof,
-  assets.lightblockheader_proof,
-  assets.round_number,
-  assets.genesis_hash,
-  assets.seed,
-  assets.block_interval_commitment
-)
+  assets = AssetLoader(sys.argv[1])
 
-assert(result)
+  result = verify_transaction(
+    assets.tx_hash,
+    assets.tx_proof,
+    assets.lightblockheader_proof,
+    assets.round_number,
+    assets.genesis_hash,
+    assets.seed,
+    assets.block_interval_commitment
+  )
+
+  assert(result)

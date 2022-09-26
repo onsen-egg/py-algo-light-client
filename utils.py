@@ -1,4 +1,3 @@
-import pickle
 from base64 import b64decode
 from hashlib import sha256
 import os
@@ -47,10 +46,6 @@ class AssetLoader:
   def load(self, file, sub_folder='transactionverification'):
     with open(os.path.join(self.folder, sub_folder, file), 'r') as f:
       return ast.literal_eval(f.read())
-
-def load(obj_file):
-  with open(obj_file, "rb") as f:
-    return pickle.load(f)
 
 # computeTransactionLeaf receives the transaction ID and the signed transaction in block's hash, and computes
 # the leaf of the vector commitment associated with the transaction.

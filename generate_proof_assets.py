@@ -17,10 +17,9 @@ net = "https://testnet-api.algonode.cloud"
 
 client = algosdk.v2client.algod.AlgodClient(token, net)
 idx_net = "https://testnet-idx.algonode.cloud"
-indexer = algosdk.v2client.indexer.IndexerClient(token, idx_net)
 
-if os.path.exists(folder_name):
-  raise Exception('The folder name {} is already in use'.format(folder_name))
+#if os.path.exists(folder_name):
+#  raise Exception('The folder name {} is already in use'.format(folder_name))
 os.mkdir(folder_name)
 
 # blocks are generated every 256 rounds
@@ -36,13 +35,19 @@ txn_to_validate = block_txns[0].txn
 
 txn_bytes = b64decode(algosdk.encoding.msgpack_encode(txn_to_validate.transaction))
 hasher = sha256()
-hasher.update(txn_bytes)
+hasher.update(b'TX' + txn_bytes)
 tx_raw_hash = hasher.digest()
+
+print(txn_to_validate.transaction)
+print(txn_bytes)
+print(tx_raw_hash)
 
 lightblockheader_proof = client.lightblockheader_proof(round_num)
 transaction_proof = client.transaction_proof(round_num, txn_to_validate.get_txid(), hashtype='sha256')
 block_info = client.block_info(round_num)
 
+#import sys
+#sys.exit()
 
 genesis_assets = {}
 

@@ -1,21 +1,8 @@
-from sys import set_coroutine_origin_tracking_depth
-from algosdk.v2client import algod
 from algosdk import encoding
 from algosdk.future import transaction
 from typing import List, Dict, Union
 import msgpack
 import base64
-
-sandbox = True 
-
-token = ""
-host = "https://node.algoexplorerapi.io"
-
-if sandbox:
-    token = "a" * 64
-    host = "http://localhost:4001"
-
-client = algod.AlgodClient(token, host)
 
 
 class SignedTxnWithAD:

@@ -1,6 +1,6 @@
-from utils import AssetLoader, verify_transaction, load
+from utils import AssetLoader, verify_transaction
 
-asset_folder = 'test_assets_2'
+asset_folder = 'testing'
 
 assets = AssetLoader(asset_folder)
 

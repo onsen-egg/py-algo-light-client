@@ -1,5 +1,6 @@
 import sys
-from utils import AssetLoader, verify_transaction
+from txVerification import verify_transaction
+from proofAssets import AssetLoader
 
 # In CLI run: python3 main.py <ASSET_FOLDER_NAME>
 

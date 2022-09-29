@@ -1,7 +1,5 @@
 from base64 import b64decode
 from hashlib import sha256
-import os
-import ast
 from lightBlockHeader import serialize_light_block_header
 
 txn_merkle_leaf = "TL".encode()
@@ -12,50 +10,15 @@ lightblockheader_prefix = "B256".encode()
 left_child = 0
 right_child = 1
 
-class AssetLoader:
-  def __init__(self, asset_folder):
-    self.folder = asset_folder
-    self.state_proof_msg = self.load(
-      'state_proof_message.json',
-      'stateproofverification'
-    )
-    self.block_interval_commitment = b64decode(self.state_proof_msg['BlockHeadersCommitment'])
-    self.lightblockheader_proof = self.load(
-      'light_block_header_proof_response.json'
-    )
-    self.tx_proof = self.load(
-      'transaction_proof_response.json'
-    )
-    self.round_number = self.load(
-      'round.txt'
-    )
-    self.genesis_hash = self.load_bytes(
-      'genesis_hash.txt'
-    )
-    self.seed = self.load_bytes(
-      'seed.txt'
-    )
-    self.tx_hash = self.load_bytes(
-      'transaction_id.txt'
-    )
-
-  def load_bytes(self, file, sub_folder='transactionverification'):
-    with open(os.path.join(self.folder, sub_folder, file), 'r') as f:
-      return bytes(ast.literal_eval(f.read()))
-
-  def load(self, file, sub_folder='transactionverification'):
-    with open(os.path.join(self.folder, sub_folder, file), 'r') as f:
-      return ast.literal_eval(f.read())
-
 # computeTransactionLeaf receives the transaction ID and the signed transaction in block's hash, and computes
 # the leaf of the vector commitment associated with the transaction.
 # Parameters:
 # transactionHash - the Sha256 hash of the canonical msgpack encoded transaction.
 # stibHash - the Sha256 of the canonical msgpack encoded transaction as it's saved in the block.
 def compute_transaction_leaf(
-  transaction_hash, # 32 bytes
-  stib_hash # 32 bytes
-):
+  transaction_hash: bytes, # 32 bytes
+  stib_hash: bytes # 32 bytes
+) -> bytes:
   m = sha256()
   m.update(txn_merkle_leaf + transaction_hash + stib_hash)
   # The leaf returned is of the form: Sha256("TL" || Sha256(transaction) || Sha256(transaction in block))
@@ -80,9 +43,9 @@ def compute_lightblockheader_leaf(
 
 # SOLIDITY NOTE: gas inefficient (needless memory usage)
 def get_vector_commitment_positions(
-  leaf_index, # uint64
-  tree_depth, # uint64
-):
+  leaf_index: int, # uint64
+  tree_depth: int, # uint64
+  ) -> "list[int]":
   if tree_depth == 0:
     raise Exception("ErrInvalidTreeDepth")
   
@@ -98,11 +61,11 @@ def get_vector_commitment_positions(
   return directions
 
 def compute_vector_commitment_root(
-  leaf, # 32 bytes
-  leaf_index, # uint64
-  proof, # bytes
-  tree_depth, # uint64
-):
+  leaf: bytes, # 32 bytes
+  leaf_index: int, # uint64
+  proof: bytes, # bytes
+  tree_depth: int, # uint64
+) -> bytes:
   if len(proof) == 0 and tree_depth == 0:
     return leaf
 
@@ -144,7 +107,7 @@ def verify_transaction(
   genesis_hash, # 32 bytes
   seed, # 32 bytes
   block_interval_commitment # 32 bytes
-):
+) -> bool:
   if transaction_proof['hashtype'] != "sha256":
     raise Exception("Only sha256 is supported for hashtype")
 

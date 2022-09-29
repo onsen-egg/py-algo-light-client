@@ -179,7 +179,7 @@ def print_ids_recursive(swad: SignedTxnWithAD, level: int):
       print_ids_recursive(itxn, level + 1)
 
 
-def decode_block(data: bytes)->list[SignedTxnWithAD]:
+def decode_block(data: bytes) -> 'list[SignedTxnWithAD]':
   txns: list[SignedTxnWithAD] = []
 
   dblock = msgpack.unpackb(data, raw=True, strict_map_key=False)

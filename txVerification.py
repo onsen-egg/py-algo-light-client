@@ -1,6 +1,6 @@
 from base64 import b64decode
 from hashlib import sha256
-from lightBlockHeader import serialize_light_block_header
+from utils import serialize_light_block_header
 
 txn_merkle_leaf = "TL".encode()
 merkle_array_node = "MA".encode()
